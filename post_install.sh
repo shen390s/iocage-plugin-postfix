@@ -86,12 +86,15 @@ mk_imap_user() {
     _user="$1"
 
     pw user add $_user -m
+    echo "$_user:$DEFAULT_PASSWD" | chpasswd
     echo "cm user/$_user" | cyradm -u cyrus `get_my_ip`
 }
 
 mk_imap_users()
 {
-    for _user in $MAIL_USERS; do
+    echo imap users $MAIL_USERS
+    echo "cyrus:$CYRUS_PASSWD" | chpasswd
+    for _user in `echo $MAIL_USERS`; do
 	mk_imap_user $_user
     done
 }
@@ -102,7 +105,15 @@ mk_imap_users()
 
 . /root/postfix.conf
 
-pkg install -y  py37-asciinema fish
+if [ -z "$DEFAULT_PASSWD" ]; then
+    DEFAULT_PASSWD="aaa123"
+fi
+
+if [ -z "$CYRUS_PASSWD" ]; then
+    CYRUS_APSSWD="aaa123"
+fi
+
+# pkg install -y  py37-asciinema fish
 
 mk_sasl_passwd
 
