@@ -76,7 +76,7 @@ mk_opiekeys() {
 }
 
 mk_imap_dirs() {
-    for _d in /var/imap /var/imap/socket /var/imap/sync /var/imap/db /var/spoool/imap; do
+    for _d in /var/imap /var/imap/socket /var/imap/sync /var/imap/db /var/spool/imap; do
 	mkdir -p $_d
 	chown -Rf cyrus:cyrus $_d
     done
