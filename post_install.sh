@@ -27,7 +27,7 @@ fix_file() {
     _file="$1"
     _tmp=`mktemp fix.XXXXXX`
     cp $_file $_tmp
-    _cmd="sed -e 's/%%MY_IP%%/$IP/g' "
+    _cmd="sed -e 's/%%MY_IP%%/$MY_IP/g' "
     _cmd="$_cmd -e 's/%%MY_DOMAIN%%/$DOMAIN/g'"
     _cmd="$_cmd -e 's/%%MY_FQDN%%/$MY_FQDN/g'"
     _cmd="$_cmd -e 's/%%RELAY_SERVER%%/$RELAY_SERVER/g'"
