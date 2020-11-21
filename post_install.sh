@@ -92,7 +92,7 @@ mk_imap_user() {
 mk_imap_users()
 {
     for _user in $MAIL_USERS; do
-	mk_imap_user
+	mk_imap_user $_user
     done
 }
 
@@ -120,12 +120,12 @@ mk_opiekeys
 
 mk_imap_dirs
 
-mk_imap_users
+# mk_imap_users
 
 sysrc -n sendmail_enable="NONE"
 
 sysrc -n dkimproxy_out_enable="YES"
-sysrc -n cyrus-imapd_enable="YES"
+sysrc -n cyrus_imapd_enable="YES"
 sysrc -n saslauthd_enable="YES"
 sysrc -n postfix_enable="YES"
 sysrc -n sshd_enable="YES"
@@ -136,3 +136,4 @@ service saslauthd start
 service postfix start
 service imapd start
 
+mk_imap_users
