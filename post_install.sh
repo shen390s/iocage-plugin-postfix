@@ -72,7 +72,7 @@ mk_aliases()
 mk_opiekeys() {
     touch /etc/opiekeys
 
-    chown postfix:postfix /etc/opiekeys
+    chown cyrus:cyrus /etc/opiekeys
 }
 
 mk_imap_dirs() {
@@ -86,8 +86,11 @@ mk_imap_user() {
     _user="$1"
 
     pw user add $_user -m
-    echo "$_user:$DEFAULT_PASSWD" | chpasswd
-    echo "cm user/$_user" | cyradm -u cyrus `get_my_ip`
+    # FIXME:
+    # we need to use expect for this
+    #
+#    echo "$_user:$DEFAULT_PASSWD" | chpasswd
+#    echo "cm user/$_user" | cyradm -u cyrus `get_my_ip`
 }
 
 mk_imap_users()
