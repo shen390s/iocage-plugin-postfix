@@ -100,7 +100,7 @@ mk_imap_users()
     echo "No configuration of Postfix found" && \
     exit 1
 
-source /root/postfix.conf
+. /root/postfix.conf
 
 pkg install -y  py37-asciinema fish
 
