@@ -82,24 +82,32 @@ mk_imap_dirs() {
     done
 }
 
-mk_imap_user() {
-    _user="$1"
-
-    pw user add $_user -m
-    # FIXME:
-    # we need to use expect for this
-    #
-#    echo "$_user:$DEFAULT_PASSWD" | chpasswd
-#    echo "cm user/$_user" | cyradm -u cyrus `get_my_ip`
-}
-
 mk_imap_users()
 {
     echo imap users $MAIL_USERS
-    echo "cyrus:$CYRUS_PASSWD" | chpasswd
+    set -x
+    if [ ! -f /root/chpasswd ]; then
+	echo no chpasswd tool found
+	exit 1
+    fi
+
+    if [ ! -f /root/addmailuser ]; then
+	echo no add mail user tool  found
+    fi
+
+    chmod +x /root/chpasswd
+    chmod +x /root/addmailuser
+
+    /root/chpasswd cyrus "$cyrus_PASSWD"
+    
     for _user in `echo $MAIL_USERS`; do
-	mk_imap_user $_user
+	_z1=`echo $_user PASSWD | sed 's/ /_/g'`
+	_passwd=`eval "echo \$$z1"`
+	echo "user $_user password $_passwd"
+	/root/chpasswd $_user $_passwd
     done
+    
+    /root/addmailuser "$cyrus_PASSWD" $MAIL_USERS
 }
 
 [ ! -f /root/postfix.conf ] && \
@@ -134,15 +142,13 @@ mk_opiekeys
 
 mk_imap_dirs
 
-# mk_imap_users
+sysrc  sendmail_enable="NONE"
 
-sysrc -n sendmail_enable="NONE"
-
-sysrc -n dkimproxy_out_enable="YES"
-sysrc -n cyrus_imapd_enable="YES"
-sysrc -n saslauthd_enable="YES"
-sysrc -n postfix_enable="YES"
-sysrc -n sshd_enable="YES"
+sysrc  dkimproxy_out_enable="YES"
+sysrc  cyrus_imapd_enable="YES"
+sysrc  saslauthd_enable="YES"
+sysrc  postfix_enable="YES"
+sysrc  sshd_enable="YES"
 
 service sshd start
 service dkimproxy_out start
