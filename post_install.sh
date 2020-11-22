@@ -85,7 +85,6 @@ mk_imap_dirs() {
 mk_imap_users()
 {
     echo imap users $MAIL_USERS
-    set -x
     if [ ! -f /root/chpasswd ]; then
 	echo no chpasswd tool found
 	exit 1
@@ -101,6 +100,7 @@ mk_imap_users()
     /root/chpasswd cyrus "$cyrus_PASSWD"
     
     for _user in `echo $MAIL_USERS`; do
+	pw user add $_user -m
 	_z1=`echo $_user PASSWD | sed 's/ /_/g'`
 	_passwd=`eval "echo \$$z1"`
 	echo "user $_user password $_passwd"
