@@ -103,7 +103,6 @@ mk_imap_users()
 	pw user add $_user -m
 	_z1=`echo $_user PASSWD | sed 's/ /_/g'`
 	_passwd=`eval "echo \$$z1"`
-	echo "user $_user password $_passwd"
 	/root/chpasswd $_user $_passwd
     done
     
