@@ -102,7 +102,8 @@ mk_imap_users()
     for _user in `echo $MAIL_USERS`; do
 	pw user add $_user -m
 	_z1=`echo $_user PASSWD | sed 's/ /_/g'`
-	_passwd=`eval "echo \$$z1"`
+        _z2="echo \$$_z1"
+	_passwd=`eval $_z2`
 	/root/chpasswd $_user $_passwd
     done
     
