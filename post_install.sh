@@ -1,9 +1,11 @@
 #!/bin/sh
 
 mk_sasl_passwd() {
-    cat >/usr/local/etc/postfix/sasl_passwd <<EOF
-$RELAY_SERVER $RELAY_USER:$RELAY_PASSWD
-EOF
+    _passwd=/usr/local/etc/postfix/sasl_passwd
+
+    for _s in `echo $RELAY_SERVER | xargs echo`; do
+        echo "$_s $RELAY_USER:$RELAY_PASSWD" >>$_passwd
+    done
 }
 
 mk_sasl_users() {
